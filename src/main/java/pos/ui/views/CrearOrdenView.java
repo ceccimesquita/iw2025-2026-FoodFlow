@@ -15,9 +15,6 @@ import pos.auth.AuthService;
 import pos.auth.RouteGuard;
 import pos.domain.Product;
 import pos.domain.TableSpot;
-import pos.service.MenuService;
-import pos.service.OrderService;
-import pos.service.TableService;
 import pos.ui.MainLayout;
 
 import java.util.ArrayList;
@@ -26,7 +23,7 @@ import java.util.List;
 @PageTitle("Crear Orden")
 @Route(value="ordenes/nueva", layout = MainLayout.class)
 public class CrearOrdenView extends VerticalLayout implements RouteGuard {
-  private final List<OrderItem> items = new ArrayList<>();
+  /*private final List<OrderItem> items = new ArrayList<>();
 
   public CrearOrdenView(TableService tables, MenuService menu, OrderService orders, AuthService auth){
     var h = new H2("Crear Orden (Mesero)");
@@ -62,5 +59,5 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
     });
 
     add(h, mesa, grid, new HorizontalLayout(btnCrear, btnDividir));
-  }
+  }*/
 }

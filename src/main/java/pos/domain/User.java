@@ -1,5 +1,6 @@
 package pos.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "usuario")
@@ -52,4 +54,31 @@ public class User {
     @EqualsAndHashCode.Exclude
     List<Address> addresses = new java.util.ArrayList<>();
 
+    public void setPassword(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    // Método para desserialização do Jackson
+    @JsonCreator
+    public static User fromId(Long id) {
+        return User.builder().id(id).build();
+    }
+
+    // Ou se você receber um objeto JSON
+    @JsonCreator
+    public static User fromMap(Map<String, Object> map) {
+        Long id = null;
+        if (map.get("id") instanceof Number) {
+            id = ((Number) map.get("id")).longValue();
+        }
+        return User.builder().id(id).build();
+    }
 }

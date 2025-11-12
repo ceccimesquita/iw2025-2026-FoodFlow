@@ -15,7 +15,7 @@ import pos.ui.MainLayout;
 @PageTitle("Login")
 @Route(value="login", layout = MainLayout.class)
 public class LoginView extends VerticalLayout implements RouteGuard {
-  public LoginView(AuthService auth){
+  /*public LoginView(AuthService auth){
     var h = new H2("Iniciar sesión (dev)");
     var user = new TextField("Usuario");
     user.setValue("carlos");
@@ -27,5 +27,5 @@ public class LoginView extends VerticalLayout implements RouteGuard {
       getUI().ifPresent(ui -> ui.navigate(""));
     });
     add(h, user, role, btn);
-  }
+  }*/
 }

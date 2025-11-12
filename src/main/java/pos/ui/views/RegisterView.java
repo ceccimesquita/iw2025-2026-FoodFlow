@@ -15,7 +15,7 @@ import pos.ui.MainLayout;
 @PageTitle("Registro")
 @Route(value="register", layout = MainLayout.class)
 public class RegisterView extends VerticalLayout implements RouteGuard {
-  public RegisterView(AuthService auth){
+  /*public RegisterView(AuthService auth){
     var h = new H2("Registro (dev) -> auto-login");
     var user = new TextField("Usuario");
     user.setValue("nuevo");
@@ -27,5 +27,5 @@ public class RegisterView extends VerticalLayout implements RouteGuard {
       getUI().ifPresent(ui -> ui.navigate("menu"));
     });
     add(h, user, role, btn);
-  }
+  }*/
 }
