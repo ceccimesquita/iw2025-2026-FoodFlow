@@ -2,7 +2,6 @@ package pos.service;
 
 import org.springframework.stereotype.Service;
 import pos.domain.Order;
-import pos.domain.OrderItem;
 import pos.repository.OrderRepository;
 
 import java.time.Instant;

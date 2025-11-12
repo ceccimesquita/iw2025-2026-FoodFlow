@@ -2,7 +2,6 @@ package pos.repository;
 
 import org.springframework.stereotype.Repository;
 import pos.domain.Order;
-import pos.domain.OrderItem;
 
 import java.time.Instant;
 import java.util.*;

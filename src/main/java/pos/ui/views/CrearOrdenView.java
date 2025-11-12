@@ -13,7 +13,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import pos.auth.AuthService;
 import pos.auth.RouteGuard;
-import pos.domain.OrderItem;
 import pos.domain.Product;
 import pos.domain.TableSpot;
 import pos.service.MenuService;

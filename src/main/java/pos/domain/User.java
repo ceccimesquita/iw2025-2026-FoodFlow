@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "usuario")
 @Data                   // getters, setters, toString, equals/hashCode
@@ -42,4 +44,12 @@ public class User {
     @Column(name = "activo", nullable = false)
     @Builder.Default
     private boolean active = true;
+
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    List<Address> addresses = new java.util.ArrayList<>();
+
 }
