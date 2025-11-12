@@ -12,22 +12,38 @@ import pos.service.OrderService;
 import pos.ui.MainLayout;
 
 @PageTitle("Cocina")
-@Route(value="cocina", layout = MainLayout.class)
+@Route(value = "cocina", layout = MainLayout.class)
 public class CocinaView extends VerticalLayout implements RouteGuard {
-  public CocinaView(OrderService orders){
-    var h = new H2("Pedidos (Cocina)  ordenados por mesa y fecha");
+
+  public CocinaView(OrderService orders) {
+    addClassName("cocina-view");
+    setSizeFull();
+    setPadding(true);
+    setSpacing(true);
+    setAlignItems(Alignment.CENTER);
+    setJustifyContentMode(JustifyContentMode.START);
+
+    var title = new H2("Pedidos (Cocina) — Ordenados por mesa y fecha");
+    title.addClassName("cocina-title");
+
     var grid = new Grid<>(Order.class, false);
-    grid.addColumn(o -> o.getId()).setHeader("#");
-    grid.addColumn(o -> o.getTableId()==null? "" : o.getTableId()).setHeader("Mesa");
-    grid.addColumn(o -> o.getCreatedAt()).setHeader("Creado");
-    grid.addColumn(o -> o.getStatus()).setHeader("Estado");
-    grid.addColumn(o -> o.total()).setHeader("Total");
-    grid.addComponentColumn(o -> new Button("A LISTO", e -> {
-      orders.updateStatus(o.getId(), Order.Status.LISTO);
-      grid.setItems(orders.kitchenQueue());
-    })).setHeader("Acci?n");
+    grid.addClassName("cocina-grid");
+    grid.addColumn(Order::getId).setHeader("#");
+    grid.addColumn(o -> o.getTableId() == null ? "" : o.getTableId()).setHeader("Mesa");
+    grid.addColumn(Order::getCreatedAt).setHeader("Creado");
+    grid.addColumn(Order::getStatus).setHeader("Estado");
+    grid.addColumn(Order::total).setHeader("Total");
+
+    grid.addComponentColumn(o -> {
+      var btn = new Button("✔ LISTO", e -> {
+        orders.updateStatus(o.getId(), Order.Status.LISTO);
+        grid.setItems(orders.kitchenQueue());
+      });
+      btn.addClassName("cocina-btn");
+      return btn;
+    }).setHeader("Acción");
 
     grid.setItems(orders.kitchenQueue());
-    add(h, grid);
+    add(title, grid);
   }
 }

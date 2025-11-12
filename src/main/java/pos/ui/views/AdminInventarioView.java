@@ -11,12 +11,29 @@ import pos.service.MenuService;
 import pos.ui.MainLayout;
 
 @PageTitle("Inventario")
-@Route(value="admin/inventario", layout = MainLayout.class)
+@Route(value = "admin/inventario", layout = MainLayout.class)
 public class AdminInventarioView extends VerticalLayout implements RouteGuard {
-  public AdminInventarioView(MenuService menu){
-    var h = new H2("Inventario (mock)");
-    var grid = new Grid<>(Product.class);
+
+  public AdminInventarioView(MenuService menu) {
+    addClassName("inventario-view");
+    setSizeFull();
+    setPadding(true);
+    setSpacing(true);
+    setAlignItems(Alignment.CENTER);
+    setJustifyContentMode(JustifyContentMode.START);
+
+    var title = new H2("Inventario (Mock)");
+    title.addClassName("inventario-title");
+
+    var grid = new Grid<>(Product.class, false);
+    grid.addClassName("inventario-grid");
+    grid.addColumn(Product::id).setHeader("ID").setAutoWidth(true);
+    grid.addColumn(Product::name).setHeader("Nombre").setAutoWidth(true);
+    grid.addColumn(Product::price).setHeader("Precio").setAutoWidth(true);
+    grid.addColumn(Product::category).setHeader("Categoría").setAutoWidth(true);
+
     grid.setItems(menu.list());
-    add(h, grid);
+
+    add(title, grid);
   }
 }

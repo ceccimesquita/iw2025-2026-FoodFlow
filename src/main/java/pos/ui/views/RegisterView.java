@@ -13,19 +13,44 @@ import pos.domain.Role;
 import pos.ui.MainLayout;
 
 @PageTitle("Registro")
-@Route(value="register", layout = MainLayout.class)
+@Route(value = "register", layout = MainLayout.class)
 public class RegisterView extends VerticalLayout implements RouteGuard {
-  public RegisterView(AuthService auth){
-    var h = new H2("Registro (dev) -> auto-login");
-    var user = new TextField("Usuario");
-    user.setValue("nuevo");
+
+  public RegisterView(AuthService auth) {
+    addClassName("register-view");
+    setSizeFull();
+    setAlignItems(Alignment.CENTER);
+    setJustifyContentMode(JustifyContentMode.CENTER);
+
+    // === Título ===
+    var title = new H2("Crear cuenta");
+    title.addClassName("register-title");
+
+    // === Campos ===
+    var username = new TextField("Usuario");
+    username.addClassName("register-input");
+    username.setValue("nuevo");
+
     var role = new ComboBox<Role>("Rol");
     role.setItems(Role.values());
     role.setValue(Role.CLIENTE);
-    var btn = new Button("Registrarme", e -> {
-      auth.login(user.getValue(), role.getValue().name());
+    role.addClassName("register-select");
+
+    // === Botón ===
+    var registerBtn = new Button("Registrarme", e -> {
+      auth.login(username.getValue(), role.getValue().name());
       getUI().ifPresent(ui -> ui.navigate("menu"));
     });
-    add(h, user, role, btn);
+    registerBtn.addClassName("register-btn");
+
+    // === Layout principal ===
+    var form = new VerticalLayout(title, username, role, registerBtn);
+    form.addClassName("register-form");
+    form.setAlignItems(Alignment.CENTER);
+    form.setSpacing(true);
+    form.setPadding(true);
+
+    add(form);
   }
 }
+

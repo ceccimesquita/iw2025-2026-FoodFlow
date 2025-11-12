@@ -94,6 +94,31 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+
+      <plugin>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-maven-plugin</artifactId>
+      <version>${vaadin.platform.version}</version>
+      <executions>
+        <!-- Prepara el frontend en dev y prod -->
+        <execution>
+          <goals>
+            <goal>prepare-frontend</goal>
+          </goals>
+        </execution>
+        <!-- Para builds de producción -->
+        <execution>
+          <id>build-frontend</id>
+          <phase>prepare-package</phase>
+          <goals>
+            <goal>build-frontend</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+
+  
+    
     </plugins>
   </build>
 </project>

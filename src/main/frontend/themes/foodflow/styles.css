@@ -1,0 +1,149 @@
+/* === CYBER GLASS DARK THEME === */
+
+:root {
+  --bg-main: #1a1b1f;
+  --bg-card: #0f1013;
+  --bg-soft: #16171b;
+  --accent-green: #00ff85;
+  --accent-blue: #58a6ff;
+  --accent-yellow: #ffd43b;
+  --accent-red: #ff4d4d;
+  --text-light: #f5f7fa;
+  --text-muted: #a5a9b3;
+  --radius: 24px;
+  --shadow-outer: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-inner: inset 0 1px 4px rgba(255, 255, 255, 0.08);
+  --blur-bg: blur(12px);
+  --font: "SF Pro Display", "Inter", "Poppins", sans-serif;
+  --transition: all 0.25s ease;
+}
+
+/* === General === */
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg-main);
+  color: var(--text-light);
+  font-family: var(--font);
+}
+
+/* === Contenedores base === */
+[class$="-view"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  gap: 2rem;
+  background: var(--bg-main);
+}
+
+/* === Tarjetas tipo widget === */
+[class$="-card"], [class$="-grid"], [class$="-canvas"], [class$="-form"] {
+  background: linear-gradient(145deg, var(--bg-card), var(--bg-soft));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-outer), var(--shadow-inner);
+  padding: 1.5rem;
+  transition: var(--transition);
+  backdrop-filter: var(--blur-bg);
+}
+
+[class$="-card"]:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+/* === Titulares === */
+h1, h2, .title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-light);
+  letter-spacing: 0.3px;
+  margin: 0;
+}
+
+/* === Botones === */
+button, vaadin-button {
+  border: none;
+  border-radius: 16px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--accent-green);
+  color: #000;
+  transition: var(--transition);
+  box-shadow: 0 0 12px rgba(0,255,133,0.4);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px rgba(0,255,133,0.6);
+}
+
+button[theme~="primary"] {
+  background: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(88,166,255,0.4);
+}
+
+/* === Inputs === */
+input, vaadin-text-field, vaadin-combo-box {
+  background: var(--bg-soft);
+  color: var(--text-light);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+  transition: var(--transition);
+}
+
+input:focus-within {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(88,166,255,0.3);
+}
+
+/* === Grids / Tablas === */
+vaadin-grid::part(header-cell) {
+  background: var(--bg-soft);
+  color: var(--accent-blue);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+vaadin-grid::part(row):hover {
+  background: rgba(255,255,255,0.05);
+  transition: 0.2s ease;
+}
+
+/* === Indicadores o valores dinámicos === */
+.value-up {
+  color: var(--accent-green);
+}
+.value-down {
+  color: var(--accent-red);
+}
+.value-neutral {
+  color: var(--accent-blue);
+}
+
+/* === Pequeños badges / chips === */
+.badge {
+  border-radius: 20px;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.8rem;
+  background: rgba(255,255,255,0.08);
+  color: var(--text-muted);
+  box-shadow: inset 0 1px 3px rgba(255,255,255,0.05);
+}
+
+.badge.success {
+  color: var(--accent-green);
+  background: rgba(0,255,133,0.1);
+}
+.badge.warning {
+  color: var(--accent-yellow);
+  background: rgba(255,212,59,0.1);
+}
+
+/* === Animaciones suaves === */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
