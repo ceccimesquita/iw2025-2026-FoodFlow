@@ -10,6 +10,8 @@ import pos.repository.UserRepository;
 
 import java.util.List;
 
+import static java.lang.Boolean.FALSE;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -25,9 +27,18 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already registered: " + user.getEmail());
         }
+
+        // Codificar a senha
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setActive(Boolean.TRUE);
-        user.setRole(Role.CLIENT);
+
+        // Garantir que o usuário esteja ativo (mas não sobrescrever se já veio definido)
+        if (user.getActive() == FALSE) {
+            user.setActive(true);
+        }
+
+        // NÃO definir role como CLIENT - usar o que veio do JSON
+        // user.setRole(Role.CLIENT); ← REMOVA ESTA LINHA
+
         return userRepository.save(user);
     }
 

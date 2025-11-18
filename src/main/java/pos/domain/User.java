@@ -66,19 +66,5 @@ public class User {
         return active;
     }
 
-    // Método para desserialização do Jackson
-    @JsonCreator
-    public static User fromId(Long id) {
-        return User.builder().id(id).build();
-    }
 
-    // Ou se você receber um objeto JSON
-    @JsonCreator
-    public static User fromMap(Map<String, Object> map) {
-        Long id = null;
-        if (map.get("id") instanceof Number) {
-            id = ((Number) map.get("id")).longValue();
-        }
-        return User.builder().id(id).build();
-    }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.OffsetDateTime;
 
+import pos.domain.SessionState;
+
 @Entity
 @Table(name = "service_session")
 @Data
@@ -18,14 +20,14 @@ public class ServiceSession {
     private Long id;
 
     // FK → table_spot.id_table_spot
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_table_spot", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private TableSpot tableSpot;
 
     // FK → usuario.id_usuario (mesero)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_mesero", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
