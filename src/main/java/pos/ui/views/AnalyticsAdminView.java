@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @JsModule("./charts-setup.js")
 public class AnalyticsAdminView extends VerticalLayout implements RouteGuard {
 
- /* @Override
+ @Override
   protected VerticalLayout initContent() {
     VerticalLayout root = new VerticalLayout();
     root.addClassNames(LumoUtility.Padding.MEDIUM);
@@ -72,5 +72,5 @@ public class AnalyticsAdminView extends VerticalLayout implements RouteGuard {
     );
 
     return root;
-  }*/
+  }
 }

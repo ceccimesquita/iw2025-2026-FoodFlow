@@ -21,7 +21,7 @@ import java.util.List;
 @PageTitle("")
 @Route(value="", layout = MainLayout.class)
 public class MenuView extends VerticalLayout {
-  /*private final List<OrderItem> cart = new ArrayList<>();
+  private final List<OrderItem> cart = new ArrayList<>();
 
   public MenuView(MenuService menu, OrderService orders, AuthService auth){
     var h = new H2("Menú digital");
@@ -73,5 +73,5 @@ public class MenuView extends VerticalLayout {
     add(h, new HorizontalLayout(cat, btnLoad), grid, delivery, address, phone, btnOrder);
   }
 
-  private Grid<Product> grid;*/
+  private Grid<Product> grid;
 }

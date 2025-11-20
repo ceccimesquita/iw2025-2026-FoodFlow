@@ -12,10 +12,10 @@ import pos.ui.MainLayout;
 @PageTitle("Inventario")
 @Route(value="admin/inventario", layout = MainLayout.class)
 public class AdminInventarioView extends VerticalLayout implements RouteGuard {
-  /*public AdminInventarioView(MenuService menu){
+  public AdminInventarioView(MenuService menu){
     var h = new H2("Inventario (mock)");
     var grid = new Grid<>(Product.class);
     grid.setItems(menu.list());
     add(h, grid);
-  }*/
+  }
 }

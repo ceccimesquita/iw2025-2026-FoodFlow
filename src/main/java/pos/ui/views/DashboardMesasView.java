@@ -20,7 +20,7 @@ import java.util.List;
 @CssImport(value = "./styles/mesas.css")
 public class DashboardMesasView extends VerticalLayout implements RouteGuard {
 
-  /*public DashboardMesasView(TableService tables, OrderService orders) {
+  public DashboardMesasView(TableService tables, OrderService orders) {
     setSizeFull();
     var h = new H2("Mapa de Mesas");
 
@@ -76,5 +76,5 @@ public class DashboardMesasView extends VerticalLayout implements RouteGuard {
     actions.setPadding(false); actions.setSpacing(true);
     card.add(actions);
     return card;
-  }*/
+  }
 }
