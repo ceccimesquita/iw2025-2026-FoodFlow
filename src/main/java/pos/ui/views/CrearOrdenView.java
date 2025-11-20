@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Crear Orden")
-@Route(value="ordenes/nueva", layout = MainLayout.class)
+@Route(value = "ordenes/crear", layout = MainLayout.class)
 public class CrearOrdenView extends VerticalLayout implements RouteGuard {
   /*private final List<OrderItem> items = new ArrayList<>();
 

@@ -15,7 +15,7 @@ import pos.ui.MainLayout;
 
 import java.util.List;
 
-@PageTitle("Dashboard Mesas")
+@PageTitle("Mesas")
 @Route(value = "mesas", layout = MainLayout.class)
 @CssImport(value = "./styles/mesas.css")
 public class DashboardMesasView extends VerticalLayout implements RouteGuard {
