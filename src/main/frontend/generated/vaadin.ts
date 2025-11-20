@@ -5,7 +5,7 @@ if (import.meta.hot) {
   import.meta.hot.on('vite:afterUpdate', () => {
     const eventbus = (window as any).Vaadin.copilot.eventbus;
     if (eventbus) {
-      eventbus.emit('vite-after-update',{});
+      eventbus.emit('vite-after-update', {});
     }
   });
 }
