@@ -53,7 +53,13 @@ public class MenuView extends VerticalLayout {
       qty.setWidth("80px");
 
       var addBtn = new Button("Añadir", ev -> {
-        cart.add(new OrderItem(p.getId(), p.getName(), qty.getValue(), p.getPrice(), ""));
+        cart.add(OrderItem.builder()
+            .productId(p.getId())
+            .productName(p.getName())
+            .qty(qty.getValue())
+            .unitPrice(p.getPrice())
+            .comment("")
+            .build());
         Notification.show(p.getName() + " x" + qty.getValue() + " añadido al carrito");
       });
       addBtn.addClassName("menu-add-btn");
@@ -104,7 +110,7 @@ public class MenuView extends VerticalLayout {
         return;
       }
       var o = orders.createCustomerOrder(
-        delivery.getValue(), address.getValue(), phone.getValue(), cart, auth.currentUser()
+        delivery.getValue(), address.getValue(), phone.getValue(), cart, auth.currentUserId()
       );
       Notification.show("Pedido realizado #" + o.getId() + " — Total: $" + o.getTotal());
       cart.clear();

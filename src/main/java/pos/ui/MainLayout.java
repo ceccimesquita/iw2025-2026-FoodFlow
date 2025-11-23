@@ -27,8 +27,8 @@ public class MainLayout extends AppLayout {
 
         list.getStyle().set("list-style", "none").set("padding", "0");
 
-        list.add(itemLink("Dashboard Mesas", "/mesas"));
-        list.add(itemLink("Pedidos", "/ordenes/nueva"));
+        list.add(itemLink("Mesas", "/mesas"));
+        list.add(itemLink("Pedidos", "/ordenes"));
         list.add(itemLink("Cocina", "/cocina"));
         list.add(itemLink("Menú Digital", "/"));
         list.add(itemLink("Caja", "/admin/caja"));
@@ -36,6 +36,7 @@ public class MainLayout extends AppLayout {
         list.add(itemLink("Reportes", "/reports"));
         list.add(itemLink("Login", "/login"));
         list.add(itemLink("Registro", "/register"));
+        list.add(itemLink("Analytics", "admin/analytics"));
 
         nav.add(list);
         nav.getStyle().set("padding", "1rem");

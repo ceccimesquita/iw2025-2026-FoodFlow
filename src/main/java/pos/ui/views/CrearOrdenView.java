@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Crear Orden")
-@Route(value = "ordenes/crear", layout = MainLayout.class)
+@Route(value = "ordenes", layout = MainLayout.class)
 public class CrearOrdenView extends VerticalLayout implements RouteGuard {
 
-  private final List<OrderItem> items = new ArrayList<>();
+  public List<OrderItem> items = new ArrayList<>();
 
   public CrearOrdenView(TableService tables, MenuService menu, OrderService orders, AuthService auth) {
     addClassName("orden-view");
@@ -50,10 +50,10 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
     // --- Tabla de productos ---
     var grid = new Grid<>(OrderItem.class, false); // Changed to OrderItem
     grid.addClassName("orden-grid");
-    grid.addColumn(OrderItem::productName).setHeader("Producto");
-    grid.addColumn(OrderItem::qty).setHeader("Cant");
-    grid.addColumn(OrderItem::unitPrice).setHeader("Precio U.");
-    grid.addColumn(i -> i.unitPrice().multiply(java.math.BigDecimal.valueOf(i.qty())))
+    grid.addColumn(OrderItem::getProductName).setHeader("Producto");
+    grid.addColumn(OrderItem::getQty).setHeader("Cant");
+    grid.addColumn(OrderItem::getUnitPrice).setHeader("Precio U.");
+    grid.addColumn(i -> i.getUnitPrice().multiply(java.math.BigDecimal.valueOf(i.getQty())))
         .setHeader("Subtotal");
 
     // Product selection and add to order
@@ -76,7 +76,13 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
       var p = productSelect.getValue();
       var q = qty.getValue();
       if (p != null && q != null && q > 0) {
-        items.add(new OrderItem(p.getId(), p.getName(), q, p.getPrice(), note.getValue()));
+        items.add(OrderItem.builder()
+            .productId(p.getId())
+            .productName(p.getName())
+            .qty(q)
+            .unitPrice(p.getPrice())
+            .comment(note.getValue())
+            .build());
         grid.setItems(items); // refresh
         Notification.show("Agregado: " + p.getName());
         productSelect.clear();
@@ -103,7 +109,7 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
         return;
       }
       // Mock creation
-      orders.createTableOrder(tableSelect.getValue().getId(), items, auth.currentUser()); // Adjusted to use existing method
+      orders.createTableOrder(tableSelect.getValue().getId(), items, auth.currentUserId()); // Adjusted to use existing method
       Notification.show("Orden creada para mesa " + tableSelect.getValue().getId());
       items.clear();
       grid.setItems(items);
@@ -111,7 +117,7 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
     btnCreate.addClassName("orden-crear-btn");
 
     var btnDividir = new Button("Dividir cuenta (50/50 demo)", e -> {
-      double total = items.stream().mapToDouble(i -> i.unitPrice().doubleValue() * i.qty()).sum(); // Use doubleValue()
+      double total = items.stream().mapToDouble(i -> i.getUnitPrice().doubleValue() * i.getQty()).sum(); // Use doubleValue()
       Notification.show("Dos cuentas de: $" + (total / 2.0));
     });
     btnDividir.addClassName("orden-dividir-btn");

@@ -7,6 +7,9 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "pedido")
@@ -67,13 +70,17 @@ public class Order {
   @Column(name = "updated_at", nullable = false)
   private OffsetDateTime updatedAt = OffsetDateTime.now();
 
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+private List<OrderItem> items = new ArrayList<>();
+
+
   @PreUpdate
   void onUpdate() {
     updatedAt = OffsetDateTime.now();
   }
 
   public Long getTableId() {
-      return serviceSession != null ? serviceSession.getId() : null;
+      return serviceSession != null && serviceSession.getTableSpot() != null ? serviceSession.getTableSpot().getId() : null;
   }
 
   public BigDecimal getTotal() {

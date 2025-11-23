@@ -130,4 +130,11 @@ public class ServiceSessionService {
                 .orElseThrow(() ->
                         new EntityNotFoundException("No OPEN ServiceSession for tableSpot id=" + tableSpotId));
     }
+    /**
+     * Busca sessão aberta de uma mesa específica (se existir), retornando Optional.
+     */
+    @Transactional(readOnly = true)
+    public java.util.Optional<ServiceSession> findActiveSession(Long tableSpotId) {
+        return serviceSessionRepository.findByTableSpotIdAndState(tableSpotId, SessionState.OPEN);
+    }
 }

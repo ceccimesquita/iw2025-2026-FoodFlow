@@ -10,7 +10,7 @@ import pos.repository.TableRepository;
 public class DataInitializer {
 
     @Bean
-    public CommandLineRunner initTables(TableRepository tableRepository) {
+    public CommandLineRunner initData(TableRepository tableRepository, pos.repository.UserRepository userRepository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         return args -> {
             if (tableRepository.count() == 0) {
                 tableRepository.save(TableSpot.builder().code("Mesa 1").capacity(4).build());
@@ -18,8 +18,17 @@ public class DataInitializer {
                 tableRepository.save(TableSpot.builder().code("Mesa 3").capacity(4).build());
                 tableRepository.save(TableSpot.builder().code("Mesa 4").capacity(4).build());
                 System.out.println("👉 Se crearon 4 mesas por defecto.");
-            } else {
-                System.out.println("👉 Las mesas ya existen, no se crean nuevamente.");
+            }
+
+            if (userRepository.count() == 0) {
+                userRepository.save(pos.domain.User.builder()
+                    .email("german@test.com")
+                    .name("german del rio")
+                    .passwordHash(passwordEncoder.encode("password"))
+                    .role(pos.domain.Role.ADMIN)
+                    .active(true)
+                    .build());
+                System.out.println("👉 Usuario 'german del rio' creado (email: german@test.com, pass: password).");
             }
         };
     }

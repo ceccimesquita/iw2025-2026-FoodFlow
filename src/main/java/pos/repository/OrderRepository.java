@@ -9,4 +9,7 @@
   public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomerId(Long customerId);
     List<Order> findByStatus(OrderStatus status);
+
+    @org.springframework.data.jpa.repository.Query("SELECT o FROM Order o LEFT JOIN FETCH o.serviceSession s LEFT JOIN FETCH s.tableSpot")
+    List<Order> findAllWithDetails();
   }
