@@ -1,11 +1,11 @@
 package pos.domain;
 
 public enum OrderStatus {
-    PENDING,          // PENDIENTE
-    IN_PREPARATION,   // EN_PREPARACION
-    LISTO,            // LISTO
-    ON_THE_WAY,       // EN_CAMINO
-    DELIVERED,        // ENTREGADO
-    CANCELED          // CANCELADO
-
+    PENDING,          // Pendiente
+    IN_PREPARATION,   // En Preparación
+    LISTO,            // Listo (Saiu da cozinha, espera pagamento)
+    ON_THE_WAY,       // En Camino (Delivery)
+    DELIVERED,        // Entregado
+    CANCELED,         // Cancelado
+    PAGADO            // <--- ADICIONE ISSO (Pago e finalizado)
 }

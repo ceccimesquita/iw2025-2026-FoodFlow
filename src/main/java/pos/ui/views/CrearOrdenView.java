@@ -21,6 +21,9 @@ import pos.service.TableService;
 import pos.service.MenuService;
 import pos.service.OrderService;
 import pos.domain.OrderItem;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,13 +52,51 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
     tableSelect.addClassName("orden-combobox");
 
     // --- Tabla de productos ---
+    // --- Tabla de productos ---
     var grid = new Grid<>(OrderItem.class, false);
     grid.addClassName("orden-grid");
-    grid.addColumn(OrderItem::getProductName).setHeader("Producto");
-    grid.addColumn(OrderItem::getQty).setHeader("Cant");
-    grid.addColumn(OrderItem::getUnitPrice).setHeader("Precio U.");
+
+    // 1. Nome do Produto (Mantém igual)
+    grid.addColumn(OrderItem::getProductName).setHeader("Producto").setAutoWidth(true);
+
+    // 2. Quantidade EDITÁVEL (Mudança Principal)
+    grid.addComponentColumn(item -> {
+      // Cria um campo numérico para cada linha
+      IntegerField qtyField = new IntegerField();
+      qtyField.setValue(item.getQty());
+      qtyField.setMin(1);
+      qtyField.setWidth("80px");
+      qtyField.setStepButtonsVisible(true); // Mostra setinhas +/-
+
+      // O que acontece quando muda o número:
+      qtyField.addValueChangeListener(e -> {
+        if (e.getValue() != null) {
+          item.setQty(e.getValue()); // Atualiza a quantidade na memória
+          grid.getDataProvider().refreshItem(item); // Força a tabela a recalcular o Subtotal visualmente
+        }
+      });
+      return qtyField;
+    }).setHeader("Cant").setWidth("110px").setFlexGrow(0);
+
+    // 3. Preço Unitário (Mantém igual)
+    grid.addColumn(OrderItem::getUnitPrice).setHeader("Precio U.").setWidth("100px");
+
+    // 4. Subtotal Calculado (Mantém igual, mas agora atualiza sozinho)
     grid.addColumn(i -> i.getUnitPrice().multiply(java.math.BigDecimal.valueOf(i.getQty())))
             .setHeader("Subtotal");
+
+    // 5. Botão de DELETAR (Novo)
+    grid.addComponentColumn(item -> {
+      Button btnDelete = new Button(new Icon(VaadinIcon.TRASH)); // Ícone de Lixeira
+      btnDelete.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_SMALL); // Vermelho e pequeno
+
+      btnDelete.addClickListener(e -> {
+        items.remove(item); // Remove da lista
+        grid.getDataProvider().refreshAll(); // Atualiza a tabela
+        Notification.show("Producto eliminado");
+      });
+      return btnDelete;
+    }).setHeader("Quitar").setWidth("90px").setFlexGrow(0);
 
     // Product selection and add to order
     var productSelect = new ComboBox<Product>("Producto");
