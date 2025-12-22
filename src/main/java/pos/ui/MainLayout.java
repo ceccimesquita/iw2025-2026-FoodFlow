@@ -27,10 +27,10 @@ public class MainLayout extends AppLayout {
 
         list.getStyle().set("list-style", "none").set("padding", "0");
 
-        list.add(itemLink("Mesas", "/mesas"));
-        list.add(itemLink("Pedidos", "/ordenes"));
-        list.add(itemLink("Cocina", "/cocina"));
         list.add(itemLink("Menú Digital", "/"));
+        list.add(itemLink("Pedidos", "/ordenes"));
+        list.add(itemLink("Mesas", "/mesas"));
+        list.add(itemLink("Cocina", "/cocina"));
         list.add(itemLink("Caja", "/admin/caja"));
         list.add(itemLink("Inventario", "/admin/inventario"));
         list.add(itemLink("Reportes", "/reports"));
