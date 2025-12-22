@@ -49,7 +49,7 @@ public class OrderService {
         Order order = Order.builder()
                 .customer(user)
                 .serviceSession(session)
-                .status(OrderStatus.PENDING)
+                .status(OrderStatus.IN_PREPARATION)
                 .total(total)
                 .build();
 
