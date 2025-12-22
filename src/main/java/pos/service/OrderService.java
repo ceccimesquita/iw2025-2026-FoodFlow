@@ -115,4 +115,12 @@ public class OrderService {
     public void payOrder(Long id) {
         updateStatus(id, OrderStatus.PAGADO);
     }
+
+    // Retorna apenas pedidos "em aberto" para aquela mesa
+    public List<Order> findActiveOrdersByTable(Long tableId) {
+        // Lista do que queremos IGNORAR
+        List<OrderStatus> finishedStatuses = List.of(OrderStatus.PAGADO, OrderStatus.CANCELED);
+
+        return orderRepository.findByTableIdAndStatusNotIn(tableId, finishedStatuses);
+    }
 }
