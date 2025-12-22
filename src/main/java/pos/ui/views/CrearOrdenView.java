@@ -5,6 +5,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -108,11 +109,23 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
         Notification.show("Agrega productos");
         return;
       }
-      // Mock creation
-      orders.createTableOrder(tableSelect.getValue().getId(), items, auth.currentUserId()); // Adjusted to use existing method
-      Notification.show("Orden creada para mesa " + tableSelect.getValue().getId());
-      items.clear();
-      grid.setItems(items);
+      // --- CORREÇÃO AQUI: Bloco Try-Catch para pegar erro de estoque ---
+      try {
+        orders.createTableOrder(tableSelect.getValue().getId(), items, auth.currentUserId());
+
+        // Se chegou aqui, deu certo (Verde)
+        Notification.show("Orden creada para mesa " + tableSelect.getValue().getId())
+                .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+
+        items.clear();
+        grid.setItems(items);
+        tableSelect.clear(); // Limpa a mesa selecionada também para evitar duplicidade
+
+      } catch (RuntimeException ex) {
+        // Se der erro de estoque, cai aqui (Vermelho)
+        Notification.show(ex.getMessage(), 5000, Notification.Position.TOP_END)
+                .addThemeVariants(NotificationVariant.LUMO_ERROR);
+      }
     });
     btnCreate.addClassName("orden-crear-btn");
 

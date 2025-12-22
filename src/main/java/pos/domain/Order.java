@@ -48,7 +48,7 @@ public class Order {
   private Address address;
 
   // Sesión de mesa (nullable - solo dine-in)
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "id_service_session")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
