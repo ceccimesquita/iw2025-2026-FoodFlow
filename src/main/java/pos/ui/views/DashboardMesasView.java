@@ -96,11 +96,14 @@ public class DashboardMesasView extends VerticalLayout implements RouteGuard {
     dialog.setHeaderTitle("Pedidos de " + t.getCode());
 
     var wrap = new VerticalLayout();
-    orders.all().stream()
-        .filter(o -> t.getId().equals(o.getTableId()))
-        .forEach(o -> wrap.add(orderCard(o, orders)));
 
-    if (wrap.getComponentCount() == 0)
+    var activeOrders = orders.findActiveOrdersByTable(t.getId());
+
+    for (Order o : activeOrders) {
+      wrap.add(orderCard(o, orders));
+    }
+
+    if (activeOrders.isEmpty()) // Verifica se a lista veio vazia
       wrap.add(new Span("Sin pedidos abiertos"));
 
     dialog.add(wrap);

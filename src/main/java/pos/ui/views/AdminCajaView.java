@@ -42,20 +42,6 @@ public class AdminCajaView extends VerticalLayout implements RouteGuard {
     var title = new H2("Caja & Pagos");
     title.addClassName("caja-title");
 
-    var summaryCard = new Div();
-    summaryCard.addClassName("caja-card");
-    summaryCard.getStyle().set("margin-bottom", "20px"); // Espaço para separar dos quadrados
-
-    var c = cash.closeDayMock();
-    var entradas = new Span("Entradas: $" + c.cashIn());
-    entradas.addClassName("caja-item");
-    var salidas = new Span("Salidas: $" + c.cashOut());
-    salidas.addClassName("caja-item");
-    var balance = new Span("Balance: $" + c.balance());
-    balance.addClassName("caja-balance");
-
-    summaryCard.add(entradas, salidas, balance);
-
     // --- 2. Área dos Quadrados das Mesas ---
     var subTitle = new H3("Mesas Listas para Cobrar");
 
@@ -69,7 +55,7 @@ public class AdminCajaView extends VerticalLayout implements RouteGuard {
     refreshCards();
 
     // Adiciona tudo na tela
-    add(title, summaryCard, subTitle, cardsContainer);
+    add(title, subTitle, cardsContainer);
   }
 
   // Método que busca os pedidos e desenha os quadrados
