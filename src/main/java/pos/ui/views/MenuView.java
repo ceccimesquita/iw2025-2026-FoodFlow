@@ -1,34 +1,26 @@
 package pos.ui.views;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import pos.auth.AuthService;
 import pos.domain.Product;
-import pos.domain.OrderItem;
 import pos.service.MenuService;
-import pos.service.OrderService;
 import pos.ui.MainLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @PageTitle("Menú Digital")
 @Route(value = "", layout = MainLayout.class)
 public class MenuView extends VerticalLayout {
 
-  private final List<OrderItem> cart = new ArrayList<>();
   private final Grid<Product> grid;
 
-  public MenuView(MenuService menu, OrderService orders, AuthService auth) {
+  // Removemos OrderService e AuthService do construtor, pois não precisamos mais deles aqui
+  public MenuView(MenuService menu) {
     addClassName("menu-view");
     setSizeFull();
     setAlignItems(Alignment.CENTER);
@@ -39,40 +31,25 @@ public class MenuView extends VerticalLayout {
     var title = new H2("Menú Digital");
     title.addClassName("menu-title");
 
-    // ✅ Primero inicializamos el grid
+    // --- 1. Grid apenas para Visualização ---
     grid = new Grid<>(Product.class, false);
     grid.addClassName("menu-grid");
-    grid.addColumn(Product::getName).setHeader("Producto");
+
+    // Colunas simples
+    grid.addColumn(Product::getName).setHeader("Producto").setAutoWidth(true);
     grid.addColumn(Product::getCategory).setHeader("Categoría");
     grid.addColumn(Product::getPrice).setHeader("Precio");
-    grid.addComponentColumn(p -> {
-      var qty = new IntegerField();
-      qty.setValue(1);
-      qty.setMin(1);
-      qty.setMax(20);
-      qty.setWidth("80px");
 
-      var addBtn = new Button("Añadir", ev -> {
-        cart.add(OrderItem.builder()
-            .productId(p.getId())
-            .productName(p.getName())
-            .qty(qty.getValue())
-            .unitPrice(p.getPrice())
-            .comment("")
-            .build());
-        Notification.show(p.getName() + " x" + qty.getValue() + " añadido al carrito");
-      });
-      addBtn.addClassName("menu-add-btn");
+    // Removi a coluna "Acción" (botão Añadir) conforme solicitado
 
-      return new HorizontalLayout(qty, addBtn);
-    }).setHeader("Acción");
     grid.setItems(menu.list());
 
-    // ✅ Luego creamos los controles que usan el grid
+    // --- 2. Filtros (Mantive pois é útil para ver o cardápio) ---
     var category = new TextField("Categoría (opcional)");
+    category.setPlaceholder("Ej: Bebidas");
     category.addClassName("menu-input");
 
-    var btnLoad = new Button("Cargar", e -> {
+    var btnLoad = new Button("Filtrar", e -> {
       if (category.getValue() == null || category.getValue().isBlank()) {
         grid.setItems(menu.list());
       } else {
@@ -82,41 +59,18 @@ public class MenuView extends VerticalLayout {
     btnLoad.addClassName("menu-btn");
 
     var header = new HorizontalLayout(category, btnLoad);
-    header.setAlignItems(Alignment.END);
+    header.setAlignItems(Alignment.BASELINE);
     header.addClassName("menu-header");
 
-    var delivery = new Checkbox("¿Entrega a domicilio?");
-    delivery.addClassName("menu-checkbox");
-
-    var address = new TextField("Dirección");
-    var phone = new TextField("Teléfono");
-    address.setVisible(false);
-    phone.setVisible(false);
-    delivery.addValueChangeListener(e -> {
-      address.setVisible(e.getValue());
-      phone.setVisible(e.getValue());
+    // --- 3. Botão de Navegação ---
+    var btnGoToOrder = new Button("Realizar Pedido", e -> {
+      // Redireciona para a tela de criar ordem ("ordenes")
+      getUI().ifPresent(ui -> ui.navigate("ordenes"));
     });
-    address.addClassName("menu-input");
-    phone.addClassName("menu-input");
+    btnGoToOrder.addClassName("menu-btn-primary");
+    btnGoToOrder.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_LARGE);
 
-    var btnOrder = new Button("Realizar pedido", e -> {
-      if (!auth.isAuthenticated()) {
-        Notification.show("Inicia sesión para realizar pedidos");
-        getUI().ifPresent(ui -> ui.navigate("login"));
-        return;
-      }
-      if (cart.isEmpty()) {
-        Notification.show("El carrito está vacío");
-        return;
-      }
-      var o = orders.createCustomerOrder(
-        delivery.getValue(), address.getValue(), phone.getValue(), cart, auth.currentUserId()
-      );
-      Notification.show("Pedido realizado #" + o.getId() + " — Total: $" + o.getTotal());
-      cart.clear();
-    });
-    btnOrder.addClassName("menu-btn-primary");
-
-    add(title, header, grid, delivery, address, phone, btnOrder);
+    // Adiciona apenas os componentes visuais
+    add(title, header, grid, btnGoToOrder);
   }
 }
