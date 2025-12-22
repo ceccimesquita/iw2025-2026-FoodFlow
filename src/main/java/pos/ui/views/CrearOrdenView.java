@@ -5,7 +5,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.notification.NotificationVariant; // Importante para as cores!
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -43,19 +43,19 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
     title.addClassName("orden-title");
 
     // --- Selección de mesa ---
-    var tableSelect = new com.vaadin.flow.component.combobox.ComboBox<TableSpot>("Mesa");
+    var tableSelect = new ComboBox<TableSpot>("Mesa");
     tableSelect.setItems(tables.all());
     tableSelect.setItemLabelGenerator(TableSpot::getCode);
     tableSelect.addClassName("orden-combobox");
 
     // --- Tabla de productos ---
-    var grid = new Grid<>(OrderItem.class, false); // Changed to OrderItem
+    var grid = new Grid<>(OrderItem.class, false);
     grid.addClassName("orden-grid");
     grid.addColumn(OrderItem::getProductName).setHeader("Producto");
     grid.addColumn(OrderItem::getQty).setHeader("Cant");
     grid.addColumn(OrderItem::getUnitPrice).setHeader("Precio U.");
     grid.addColumn(i -> i.getUnitPrice().multiply(java.math.BigDecimal.valueOf(i.getQty())))
-        .setHeader("Subtotal");
+            .setHeader("Subtotal");
 
     // Product selection and add to order
     var productSelect = new ComboBox<Product>("Producto");
@@ -78,12 +78,12 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
       var q = qty.getValue();
       if (p != null && q != null && q > 0) {
         items.add(OrderItem.builder()
-            .productId(p.getId())
-            .productName(p.getName())
-            .qty(q)
-            .unitPrice(p.getPrice())
-            .comment(note.getValue())
-            .build());
+                .productId(p.getId())
+                .productName(p.getName())
+                .qty(q)
+                .unitPrice(p.getPrice())
+                .comment(note.getValue())
+                .build());
         grid.setItems(items); // refresh
         Notification.show("Agregado: " + p.getName());
         productSelect.clear();
@@ -101,28 +101,38 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
 
     // --- Botones principales ---
     var btnCreate = new Button("Crear Orden", e -> {
+      // 1. Validação: Mesa não selecionada
       if (tableSelect.getValue() == null) {
-        Notification.show("Selecciona una mesa");
+        Notification.show("Selecciona una mesa", 3000, Notification.Position.TOP_END)
+                .addThemeVariants(NotificationVariant.LUMO_ERROR);
         return;
       }
+
+      // 2. Validação: Carrinho vazio
       if (items.isEmpty()) {
-        Notification.show("Agrega productos");
+        Notification.show("Agrega productos", 3000, Notification.Position.TOP_END)
+                .addThemeVariants(NotificationVariant.LUMO_ERROR);
         return;
       }
-      // --- CORREÇÃO AQUI: Bloco Try-Catch para pegar erro de estoque ---
+
+      // 3. Tentativa de criar o pedido
       try {
         orders.createTableOrder(tableSelect.getValue().getId(), items, auth.currentUserId());
 
-        // Se chegou aqui, deu certo (Verde)
-        Notification.show("Orden creada para mesa " + tableSelect.getValue().getId())
+        // ✅ SUCESSO (VERDE)
+        // LUMO_SUCCESS deixa verde. Position.TOP_END coloca no canto superior direito.
+        Notification.show("Orden creada exitosamente para la mesa " + tableSelect.getValue().getId(),
+                        3000, Notification.Position.TOP_END)
                 .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 
+        // Limpa a tela após sucesso
         items.clear();
         grid.setItems(items);
-        tableSelect.clear(); // Limpa a mesa selecionada também para evitar duplicidade
+        tableSelect.clear();
 
       } catch (RuntimeException ex) {
-        // Se der erro de estoque, cai aqui (Vermelho)
+        // ❌ ERRO DE ESTOQUE (VERMELHO)
+        // LUMO_ERROR deixa vermelho. Mostra a mensagem exata do erro.
         Notification.show(ex.getMessage(), 5000, Notification.Position.TOP_END)
                 .addThemeVariants(NotificationVariant.LUMO_ERROR);
       }
@@ -130,7 +140,7 @@ public class CrearOrdenView extends VerticalLayout implements RouteGuard {
     btnCreate.addClassName("orden-crear-btn");
 
     var btnDividir = new Button("Dividir cuenta (50/50 demo)", e -> {
-      double total = items.stream().mapToDouble(i -> i.getUnitPrice().doubleValue() * i.getQty()).sum(); // Use doubleValue()
+      double total = items.stream().mapToDouble(i -> i.getUnitPrice().doubleValue() * i.getQty()).sum();
       Notification.show("Dos cuentas de: $" + (total / 2.0));
     });
     btnDividir.addClassName("orden-dividir-btn");
