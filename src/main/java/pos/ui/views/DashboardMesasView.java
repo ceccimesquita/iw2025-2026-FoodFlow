@@ -115,17 +115,6 @@ public class DashboardMesasView extends VerticalLayout implements RouteGuard {
         " | Estado: " + o.getStatus() +
         " | Total: $" + o.getTotal()));
 
-    var btnPrep = new Button("Preparando", e -> {
-      orders.updateStatus(o.getId(), pos.domain.OrderStatus.IN_PREPARATION);
-      card.getElement().callJsFunction("remove");
-    });
-
-    var btnCerrar = new Button("Cerrar", e -> {
-      orders.updateStatus(o.getId(), pos.domain.OrderStatus.DELIVERED);
-      card.getElement().callJsFunction("remove");
-    });
-
-    card.add(btnPrep, btnCerrar);
     return card;
   }
 }
