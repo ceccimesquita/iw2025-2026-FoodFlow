@@ -36,8 +36,14 @@ public class CocinaView extends VerticalLayout implements RouteGuard {
 
     grid.addComponentColumn(o -> {
       var btn = new Button("✔ LISTO", e -> {
+        // Muda para LISTO (disponível para o Caixa agora)
         orders.updateStatus(o.getId(), pos.domain.OrderStatus.LISTO);
+
+        // Atualiza a grid da cozinha (o pedido deve sumir daqui)
         grid.setItems(orders.kitchenQueue());
+
+        // Feedback opcional
+        com.vaadin.flow.component.notification.Notification.show("Orden enviada a Caja");
       });
       btn.addClassName("cocina-btn");
       return btn;

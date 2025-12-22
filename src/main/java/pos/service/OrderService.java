@@ -106,4 +106,13 @@ public class OrderService {
         orderRepository.save(order);
         log.info("Order {} status updated to {}", id, status);
     }
+
+    public List<Order> readyToPayQueue() {
+        return orderRepository.findByStatus(OrderStatus.LISTO);
+    }
+
+    // Processa o pagamento e finaliza
+    public void payOrder(Long id) {
+        updateStatus(id, OrderStatus.PAGADO);
+    }
 }
