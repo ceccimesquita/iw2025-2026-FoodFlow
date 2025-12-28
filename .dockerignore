@@ -1,0 +1,10 @@
+target/
+.mvn/wrapper/maven-wrapper.jar
+*.log
+.git/
+.gitignore
+secrets.properties
+README.md
+.idea/
+*.iml
+node_modules/
